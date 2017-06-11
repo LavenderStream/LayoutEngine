@@ -19,10 +19,10 @@ public class Config {
 	// 行间距
 	private int rowSpacing;
 	// 字体大小
-	private int  fontSize;
+	private int fontSize;
 	// 字体间距
 	private int fontSpacing;
-	
+
 	public int getFontSpacing() {
 		return fontSpacing;
 	}
@@ -36,6 +36,9 @@ public class Config {
 	}
 
 	public void setFontSize(int fontSize) {
+		if (fontSize == 0) {
+			new Throwable("text font size must > 0");
+		}
 		this.fontSize = fontSize;
 	}
 

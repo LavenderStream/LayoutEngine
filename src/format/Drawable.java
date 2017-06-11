@@ -8,6 +8,14 @@ public class Drawable {
 	protected int width = 0;
 	protected int padding = 0;
 	
+	protected String info;
+	
+	public String getInfo() {
+		return info;
+	}
+	public void setInfo(String info) {
+		this.info = info;
+	}
 	public int getHeight() {
 		return height;
 	}

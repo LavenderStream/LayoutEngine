@@ -7,7 +7,7 @@ package map;
 public class Label {
 	
 	public enum LabelType{
-		imgae,
+		image,
 		text,
 		View
 	}
