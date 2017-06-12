@@ -16,9 +16,4 @@ public class Text extends Drawable {
 	public void setFontSize(int fontSize) {
 		this.fontSize = fontSize;
 	}
-
-	@Override
-	public TextConfig getConfig() {
-		return (TextConfig) super.getConfig();
-	}
 }

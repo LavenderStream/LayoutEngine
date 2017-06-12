@@ -4,6 +4,9 @@ import format.book.FormatBook;
 import format.book.Line;
 import format.book.Page;
 import format.config.Config;
+import format.config.DrawableConfig;
+import format.config.PageConfig;
+import format.config.TextConfig;
 import format.drawable.Drawable;
 import format.drawable.Text;
 import map.Label;
@@ -14,7 +17,7 @@ import map.SourceBook;
  */
 public class Format {
 	// 排版时用户的配置
-	private Config config;
+	private PageConfig config;
 	// 排版时横向上的位置指针
 	private int widthCursor = 0;
 	// 排版时列方向上的位置指针
@@ -23,7 +26,7 @@ public class Format {
 	private Page pageTemp;
 	private FormatBook formatBook;
 
-	public void init(Config config) {
+	public void init(PageConfig config) {
 		this.config = config;
 
 		widthCursor = config.getViewPaddingLeft();
@@ -45,9 +48,10 @@ public class Format {
 			// 除了第一段之外， 其他的段落调到下一行
 			if (i != 0) {
 				this.widthCursor = config.getViewPaddingLeft();
-				this.heightCursor = heightCursor + config.getRowSpacing() + config.getFontSize();
+				int fontSize = ((TextConfig) source.getAllLabel().get(i).getConfig()).getFontSize();
+				this.heightCursor = heightCursor + config.getRowSpacing() + fontSize;
 				// 是否能继续写这页
-				if (canPutHeight()) {
+				if (canPutHeight((TextConfig) source.getAllLabel().get(i).getConfig())) {
 				} else {
 					this.heightCursor = config.getViewPaddingTop();
 					formatBook.add(pageTemp);
@@ -71,7 +75,7 @@ public class Format {
 		this.lineTemp = new Line();
 		switch (label.getLabelType()) {
 		case text:
-			doFormatText(label.getInfo());
+			doFormatText(label);
 			break;
 		case image:
 			doFormatImage(label.getInfo());
@@ -91,18 +95,20 @@ public class Format {
 	/**
 	 * 处理文字的排版
 	 */
-	private void doFormatText(String info) {
-		for (int i = 0; i < info.length(); i++) {
+	private void doFormatText(Label label) {
+		for (int i = 0; i < label.getInfo().length(); i++) {
+			TextConfig cfg = (TextConfig) label.getConfig();
 			// 如果现在宽能放下
-			if (canPutWidth()) {
+			if (canPutWidth((TextConfig) label.getConfig())) {
 				Drawable drawable = new Text();
 				// 构建一个可绘制物
-				drawable.setInfo(info.charAt(i) + "");
+				drawable.setInfo(label.getInfo().charAt(i) + "");
 
 				drawable.setX(widthCursor);
 				drawable.setY(heightCursor);
 				// 累加宽度
-				widthCursor = widthCursor + config.getFontSize() + config.getFontSpacing();
+
+				widthCursor = widthCursor + cfg.getFontSize() + cfg.getFontSpacing();
 
 				// 将可绘制物放在一行里
 				lineTemp.add(drawable);
@@ -110,16 +116,16 @@ public class Format {
 				// 重置横向指针
 				widthCursor = config.getViewPaddingLeft();
 				// 如果现在高还能放得下
-				if (canPutHeight()) {
+				if (canPutHeight((TextConfig) label.getConfig())) {
 					// 需要另创建新行时，将就行保存
 					// 当进行排列下一段是，会直接走到这里，但是此时是个空行
 					if (lineTemp.getLine().size() != 0)
 						pageTemp.add(lineTemp);
 					lineTemp = new Line();
 					// 累加高度
-					heightCursor = heightCursor + config.getRowSpacing() + config.getFontSize();
+					heightCursor = heightCursor + config.getRowSpacing() + cfg.getFontSize();
 
-					if (!canPutHeight()) {
+					if (!canPutHeight((TextConfig) label.getConfig())) {
 						// 需要创建新页
 						widthCursor = config.getViewPaddingLeft();
 						heightCursor = config.getViewPaddingTop();
@@ -144,20 +150,20 @@ public class Format {
 		}
 	}
 
-	private boolean canPutWidth() {
+	private boolean canPutWidth(TextConfig cfg) {
 		// 最大可绘制的区域宽度
 		int limitWidth = config.getViewWidth() - config.getViewPaddingRight();
 
-		if ((widthCursor + config.getFontSpacing() + config.getFontSize()) > limitWidth) {
+		if ((widthCursor + cfg.getFontSpacing() + cfg.getFontSize()) > limitWidth) {
 			return false;
 		}
 
 		return true;
 	}
 
-	private boolean canPutHeight() {
+	private boolean canPutHeight(TextConfig cfg) {
 		int limitHeight = config.getViewHeight() - config.getViewPaddingBottom();
-		if ((heightCursor + config.getRowSpacing() + config.getFontSize()) > limitHeight) {
+		if ((heightCursor + config.getRowSpacing() + cfg.getFontSize()) > limitHeight) {
 			return false;
 		}
 

@@ -16,8 +16,6 @@ public abstract class Drawable {
 	protected int height = 0;
 	// 可绘制物信息
 	protected String info;
-	// 可绘制物的配置
-	protected DrawableConfig config;
 
 	public int getX() {
 		return x;
@@ -57,13 +55,5 @@ public abstract class Drawable {
 
 	public void setInfo(String info) {
 		this.info = info;
-	}
-
-	public DrawableConfig getConfig() {
-		return config;
-	}
-
-	public void setConfig(DrawableConfig config) {
-		this.config = config;
 	}
 }
