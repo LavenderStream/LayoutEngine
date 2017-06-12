@@ -1,10 +1,10 @@
-import map.TextLabel;
-import map.Label.LabelType;
-import format.Config;
 import format.Format;
-import format.Image;
+import format.config.Config;
+import format.drawable.Image;
 import map.ImageLabel;
+import map.Label.LabelType;
 import map.SourceBook;
+import map.TextLabel;
 
 public class Demo {
 	public static void main(String[] args) {
@@ -36,13 +36,13 @@ public class Demo {
 		sourceBook.addInfo(textLabel3);
 		// 设置配置
 		Config config = new Config();
-		config.setViewWidth(6);
-		config.setViewHeight(6);
+		config.setViewWidth(8);
+		config.setViewHeight(8);
 		config.setViewPaddingBottom(1);
 		config.setViewPaddingTop(1);
-		config.setViewPaddingLeft(0);
-		config.setViewPaddingRight(0);
-		config.setFontSize(2);
+		config.setViewPaddingLeft(1);
+		config.setViewPaddingRight(1);
+		config.setFontSize(1);
 		config.setFontSpacing(0);
 		config.setRowSpacing(0);
 		// 驱动排版

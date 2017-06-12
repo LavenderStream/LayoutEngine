@@ -1,13 +1,19 @@
-package format;
+package format.book;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import format.drawable.Drawable;
 
 public class Line {
 	List<Drawable> elements = new ArrayList<>();
 
 	public void add(Drawable drawable) {
 		elements.add(drawable);
+	}
+	
+	public List<Drawable> getLine(){
+		return elements;
 	}
 
 	public void printf() {

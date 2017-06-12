@@ -1,5 +1,11 @@
 package format;
 
+import format.book.FormatBook;
+import format.book.Line;
+import format.book.Page;
+import format.config.Config;
+import format.drawable.Drawable;
+import format.drawable.Text;
 import map.Label;
 import map.SourceBook;
 
@@ -91,10 +97,10 @@ public class Format {
 			if (canPutWidth()) {
 				Drawable drawable = new Text();
 				// 构建一个可绘制物
-				drawable.info = info.charAt(i) + "";
+				drawable.setInfo(info.charAt(i) + "");
 
-				drawable.x = widthCursor;
-				drawable.y = heightCursor;
+				drawable.setX(widthCursor);
+				drawable.setY(heightCursor);
 				// 累加宽度
 				widthCursor = widthCursor + config.getFontSize() + config.getFontSpacing();
 
@@ -107,7 +113,7 @@ public class Format {
 				if (canPutHeight()) {
 					// 需要另创建新行时，将就行保存
 					// 当进行排列下一段是，会直接走到这里，但是此时是个空行
-					if (lineTemp.elements.size() != 0)
+					if (lineTemp.getLine().size() != 0)
 						pageTemp.add(lineTemp);
 					lineTemp = new Line();
 					// 累加高度
@@ -158,12 +164,12 @@ public class Format {
 		return true;
 	}
 
-	private boolean isIndent(int index) {
-		if (index == 0 || index == 1) {
-			return true;
-		}
-		return false;
-	}
+	// private boolean isIndent(int index) {
+	// if (index == 0 || index == 1) {
+	// return true;
+	// }
+	// return false;
+	// }
 
 	public void testFormatBook() {
 		System.out.println("pages: " + this.formatBook.getPageSize());

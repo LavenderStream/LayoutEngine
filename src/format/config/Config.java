@@ -1,4 +1,4 @@
-package format;
+package format.config;
 
 /**
  * 用于排版的信息配置

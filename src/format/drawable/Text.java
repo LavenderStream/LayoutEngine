@@ -1,5 +1,10 @@
-package format;
+package format.drawable;
 
+import format.config.TextConfig;
+
+/**
+ * 文字
+ */
 public class Text extends Drawable {
 	// 字体大小(单位像素px)
 	private int fontSize;
@@ -10,7 +15,10 @@ public class Text extends Drawable {
 
 	public void setFontSize(int fontSize) {
 		this.fontSize = fontSize;
-		setWidth(fontSize);
-		setHeight(fontSize);
+	}
+
+	@Override
+	public TextConfig getConfig() {
+		return (TextConfig) super.getConfig();
 	}
 }
