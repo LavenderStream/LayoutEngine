@@ -3,6 +3,8 @@ package map;
 import java.util.ArrayList;
 import java.util.List;
 
+import map.dom.Label;
+
 /**
  * 原始文件映射到未排版数据
  */

@@ -1,7 +1,5 @@
 package format.drawable;
 
-import format.config.DrawableConfig;
-
 /**
  * 可绘制物基类
  */

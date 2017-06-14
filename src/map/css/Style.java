@@ -1,9 +1,9 @@
-package format.config;
+package map.css;
 
 /**
  * 用于排版的信息配置
  */
-public class Config {
+public class Style {
 	// 阅读器显示区域宽度
 	private int viewWidth;
 	// 阅读器显示区域高度

@@ -1,6 +1,6 @@
-package format.config;
+package map.css;
 
-public class PageConfig {
+public class PageStyle {
 	// 阅读器显示区域宽度
 	private int viewWidth;
 	// 阅读器显示区域高度

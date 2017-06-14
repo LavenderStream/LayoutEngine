@@ -1,7 +1,6 @@
-package map;
+package map.dom;
 
-import format.config.DrawableConfig;
-import format.drawable.Drawable;
+import map.css.DrawableStyle;
 
 /**
  * 标签
@@ -17,7 +16,7 @@ public class Label {
 	protected LabelType labelType;
 	// 标签的信息
 	protected String info;
-	protected DrawableConfig config;
+	protected DrawableStyle config;
 
 	public LabelType getLabelType() {
 		return labelType;
@@ -35,11 +34,11 @@ public class Label {
 		this.info = info;
 	}
 
-	public DrawableConfig getConfig() {
+	public DrawableStyle getConfig() {
 		return config;
 	}
 
-	public void setConfig(DrawableConfig config) {
+	public void setConfig(DrawableStyle config) {
 		this.config = config;
 	}
 }

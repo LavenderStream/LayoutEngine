@@ -1,26 +1,24 @@
+package test;
 import format.Format;
-import format.config.Config;
-import format.config.PageConfig;
-import format.config.TextConfig;
-import format.drawable.Image;
-import map.ImageLabel;
-import map.Label.LabelType;
 import map.SourceBook;
-import map.TextLabel;
+import map.css.PageStyle;
+import map.css.TextStyle;
+import map.dom.Label.LabelType;
+import map.dom.TextLabel;
 
 public class Demo {
 	public static void main(String[] args) {
 		// 设置配置
-		PageConfig config = new PageConfig();
-		config.setViewWidth(5);
-		config.setViewHeight(5);
+		PageStyle config = new PageStyle();
+		config.setViewWidth(10);
+		config.setViewHeight(10);
 		config.setViewPaddingBottom(1);
 		config.setViewPaddingTop(1);
 		config.setViewPaddingLeft(1);
 		config.setViewPaddingRight(1);
 		config.setRowSpacing(0);
 
-		TextConfig textConfig = new TextConfig();
+		TextStyle textConfig = new TextStyle();
 		textConfig.setFontSize(1);
 		textConfig.setFontSpacing(0);
 		// 解析一个标签

@@ -1,33 +1,34 @@
 package format;
 
-import format.book.FormatBook;
+import format.book.Chapter;
 import format.book.Line;
 import format.book.Page;
-import format.config.Config;
-import format.config.DrawableConfig;
-import format.config.PageConfig;
-import format.config.TextConfig;
 import format.drawable.Drawable;
 import format.drawable.Text;
-import map.Label;
 import map.SourceBook;
+import map.css.PageStyle;
+import map.css.TextStyle;
+import map.dom.Label;
 
 /**
  * 文章的排版
  */
 public class Format {
 	// 排版时用户的配置
-	private PageConfig config;
+	private PageStyle pageStyle;
 	// 排版时横向上的位置指针
 	private int widthCursor = 0;
 	// 排版时列方向上的位置指针
 	private int heightCursor = 1;
-	private Line lineTemp;
+	// 章
+	private Chapter chapterTemp;
+	// 页
 	private Page pageTemp;
-	private FormatBook formatBook;
+	// 行
+	private Line lineTemp;
 
-	public void init(PageConfig config) {
-		this.config = config;
+	public void init(PageStyle config) {
+		this.pageStyle = config;
 
 		widthCursor = config.getViewPaddingLeft();
 		heightCursor = config.getViewPaddingTop();
@@ -40,21 +41,21 @@ public class Format {
 	 */
 	public void formatSource(SourceBook source) {
 		// 创建一本书
-		this.formatBook = new FormatBook();
+		this.chapterTemp = new Chapter();
 		// 创建一页纸
 		this.pageTemp = new Page();
 		// 按照每个标签进行循环
 		for (int i = 0; i < source.getAllLabel().size(); i++) {
 			// 除了第一段之外， 其他的段落调到下一行
 			if (i != 0) {
-				this.widthCursor = config.getViewPaddingLeft();
-				int fontSize = ((TextConfig) source.getAllLabel().get(i).getConfig()).getFontSize();
-				this.heightCursor = heightCursor + config.getRowSpacing() + fontSize;
+				this.widthCursor = pageStyle.getViewPaddingLeft();
+				int fontSize = ((TextStyle) source.getAllLabel().get(i).getConfig()).getFontSize();
+				this.heightCursor = heightCursor + pageStyle.getRowSpacing() + fontSize;
 				// 是否能继续写这页
-				if (canPutHeight((TextConfig) source.getAllLabel().get(i).getConfig())) {
+				if (canPutHeight((TextStyle) source.getAllLabel().get(i).getConfig())) {
 				} else {
-					this.heightCursor = config.getViewPaddingTop();
-					formatBook.add(pageTemp);
+					this.heightCursor = pageStyle.getViewPaddingTop();
+					chapterTemp.add(pageTemp);
 					pageTemp = new Page();
 				}
 			}
@@ -62,7 +63,7 @@ public class Format {
 			// 全部排版成功之后
 			pageTemp.add(lineTemp);
 		}
-		formatBook.add(pageTemp);
+		chapterTemp.add(pageTemp);
 	}
 
 	/**
@@ -97,9 +98,9 @@ public class Format {
 	 */
 	private void doFormatText(Label label) {
 		for (int i = 0; i < label.getInfo().length(); i++) {
-			TextConfig cfg = (TextConfig) label.getConfig();
+			TextStyle cfg = (TextStyle) label.getConfig();
 			// 如果现在宽能放下
-			if (canPutWidth((TextConfig) label.getConfig())) {
+			if (canPutWidth((TextStyle) label.getConfig())) {
 				Drawable drawable = new Text();
 				// 构建一个可绘制物
 				drawable.setInfo(label.getInfo().charAt(i) + "");
@@ -114,33 +115,33 @@ public class Format {
 				lineTemp.add(drawable);
 			} else {
 				// 重置横向指针
-				widthCursor = config.getViewPaddingLeft();
+				widthCursor = pageStyle.getViewPaddingLeft();
 				// 如果现在高还能放得下
-				if (canPutHeight((TextConfig) label.getConfig())) {
+				if (canPutHeight((TextStyle) label.getConfig())) {
 					// 需要另创建新行时，将就行保存
 					// 当进行排列下一段是，会直接走到这里，但是此时是个空行
 					if (lineTemp.getLine().size() != 0)
 						pageTemp.add(lineTemp);
 					lineTemp = new Line();
 					// 累加高度
-					heightCursor = heightCursor + config.getRowSpacing() + cfg.getFontSize();
+					heightCursor = heightCursor + pageStyle.getRowSpacing() + cfg.getFontSize();
 
-					if (!canPutHeight((TextConfig) label.getConfig())) {
+					if (!canPutHeight((TextStyle) label.getConfig())) {
 						// 需要创建新页
-						widthCursor = config.getViewPaddingLeft();
-						heightCursor = config.getViewPaddingTop();
+						widthCursor = pageStyle.getViewPaddingLeft();
+						heightCursor = pageStyle.getViewPaddingTop();
 						// 添加旧页到书中
-						formatBook.add(pageTemp);
+						chapterTemp.add(pageTemp);
 						pageTemp = new Page();
 					}
 					// 重复上次动作
 					i--;
 				} else {
 					// 需要创建新页
-					widthCursor = config.getViewPaddingLeft();
-					heightCursor = config.getViewPaddingTop();
+					widthCursor = pageStyle.getViewPaddingLeft();
+					heightCursor = pageStyle.getViewPaddingTop();
 					// 添加旧页到书中
-					formatBook.add(pageTemp);
+					chapterTemp.add(pageTemp);
 					pageTemp = new Page();
 
 					i--;
@@ -150,9 +151,9 @@ public class Format {
 		}
 	}
 
-	private boolean canPutWidth(TextConfig cfg) {
+	private boolean canPutWidth(TextStyle cfg) {
 		// 最大可绘制的区域宽度
-		int limitWidth = config.getViewWidth() - config.getViewPaddingRight();
+		int limitWidth = pageStyle.getViewWidth() - pageStyle.getViewPaddingRight();
 
 		if ((widthCursor + cfg.getFontSpacing() + cfg.getFontSize()) > limitWidth) {
 			return false;
@@ -161,9 +162,9 @@ public class Format {
 		return true;
 	}
 
-	private boolean canPutHeight(TextConfig cfg) {
-		int limitHeight = config.getViewHeight() - config.getViewPaddingBottom();
-		if ((heightCursor + config.getRowSpacing() + cfg.getFontSize()) > limitHeight) {
+	private boolean canPutHeight(TextStyle cfg) {
+		int limitHeight = pageStyle.getViewHeight() - pageStyle.getViewPaddingBottom();
+		if ((heightCursor + pageStyle.getRowSpacing() + cfg.getFontSize()) > limitHeight) {
 			return false;
 		}
 
@@ -178,12 +179,12 @@ public class Format {
 	// }
 
 	public void testFormatBook() {
-		System.out.println("pages: " + this.formatBook.getPageSize());
+		System.out.println("pages: " + this.chapterTemp.getPageSize());
 
-		for (int i = 0; i < formatBook.getPageSize(); i++) {
+		for (int i = 0; i < chapterTemp.getPageSize(); i++) {
 			System.out.println("第" + i + "页");
-			for (int j = 0; j < formatBook.getPage(i).getLineSize(); j++) {
-				formatBook.getPage(i).getLine(j).printf();
+			for (int j = 0; j < chapterTemp.getPage(i).getLineSize(); j++) {
+				chapterTemp.getPage(i).getLine(j).printf();
 			}
 
 		}

@@ -3,7 +3,7 @@ package format.book;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FormatBook {
+public class Chapter {
 	List<Page> pages = new ArrayList<>();
 
 	public void add(Page page) {
@@ -17,5 +17,4 @@ public class FormatBook {
 	public Page getPage(int page) {
 		return this.pages.get(page);
 	}
-
 }

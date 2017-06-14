@@ -1,7 +1,5 @@
 package format.drawable;
 
-import format.config.TextConfig;
-
 /**
  * 文字
  */

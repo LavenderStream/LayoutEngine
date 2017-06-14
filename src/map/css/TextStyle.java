@@ -1,6 +1,6 @@
-package format.config;
+package map.css;
 
-public class TextConfig extends DrawableConfig {
+public class TextStyle extends DrawableStyle {
 	// 字体大小
 	private int fontSize;
 	// 字体间距
